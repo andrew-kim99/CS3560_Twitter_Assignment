@@ -1,9 +1,12 @@
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 //This class is called upon when a user is correctly selected
 //and the UserView button is pressed on. This class will display
@@ -26,6 +29,14 @@ public class UserView {
     public void display(DefaultMutableTreeNode selectedNode) {
         JFrame frame = new JFrame("User View for User ID: " + selectedNode.toString());
 
+        ArrayList<Long> tempTime = Twitter.pointer.getUserTime();
+        ArrayList<String> tempUsers = Twitter.pointer.getUsers();
+        ArrayList<Long> tempUpdatedTime = Twitter.pointer.getUpdatedTime();
+
+        long milliTime = tempTime.get(tempUsers.indexOf(selectedNode.toString()));
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyy HH:mm");
+        Date resultDate = new Date(milliTime);
+        JLabel time = new JLabel("Creation Time: " + sdf.format(resultDate));
         JButton followButton = new JButton("Follow User");
         JButton postButton = new JButton("Post Tweet");
         JButton refreshButton = new JButton("Refresh Feed");
@@ -56,6 +67,18 @@ public class UserView {
                 model2.addElement(tweets.get(i));
             }
         }
+        ArrayList<Long> times = tf.getUpdatedTimes();
+
+        JLabel lastUpdated = new JLabel();
+
+        if (times.size() > 0) {
+            long currentTime = times.get(times.size() - 1);
+            Date update = new Date(currentTime);
+            lastUpdated.setText("Last Updated: " + sdf.format(update));
+        } else {
+            lastUpdated.setText("Last Updated: no update yet.");
+        }
+
         JList feed = new JList(model2);
 
         JScrollPane scrollpane = new JScrollPane(feed);
@@ -133,6 +156,13 @@ public class UserView {
                         model2.addElement(tweets.get(i));
                     }
                 }
+                if (times.size() > 0) {
+                    long currentTime = times.get(times.size() - 1);
+                    Date update = new Date(currentTime);
+                    lastUpdated.setText("Last Updated: " + sdf.format(update));
+                } else {
+                    lastUpdated.setText("Last Updated: no update yet.");
+                }
             }
         });
 
@@ -161,9 +191,13 @@ public class UserView {
                     frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 } else {
                     ArrayList<User> tempUser = Twitter.pointer.getUsersSubject();
+                    ArrayList<Long> tempTime = Twitter.pointer.getUpdatedTime();
 
+                    long milliseconds = System.currentTimeMillis();
+                    tempTime.set(holder2, milliseconds);
+                    Twitter.pointer.setUpdatedTime(tempTime);
                     User currentUser = tempUser.get(holder2);
-                    currentUser.setTweet(selectedNode.toString() + ": " + message.getText());
+                    currentUser.setTweet(selectedNode.toString() + ": " + message.getText(), milliseconds);
                     model2.addElement(selectedNode.toString() + ": " + message.getText());
                     ArrayList<String> tempMessages = Twitter.pointer.getMessages();
                     tempMessages.add(selectedNode.toString() + ": " + message.getText());
@@ -202,12 +236,14 @@ public class UserView {
         panel2.add(postButton);
         panel2.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        panel3.add(time);
         panel3.add(panel1);
         panel3.add(followList);
         panel3.add(followingList);
         panel3.add(panel2);
         panel3.add(scrollpane);
         panel3.add(refreshButton);
+        panel3.add(lastUpdated);
         panel3.setAlignmentY(Component.CENTER_ALIGNMENT);
         panel3.setAlignmentX(Component.CENTER_ALIGNMENT);
 

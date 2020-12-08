@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 
 //This abstract class is extended by the User class to follow

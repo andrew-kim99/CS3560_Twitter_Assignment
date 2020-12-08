@@ -1,3 +1,4 @@
+
 //this class contains the groupTotal variable, which the size of the 
 //groups ArrayList from the Twitter class. As more groups are added
 //to the system, this class will contain the number of total groups

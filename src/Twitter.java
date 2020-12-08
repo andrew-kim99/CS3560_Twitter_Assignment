@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeSelectionEvent;
@@ -20,6 +21,10 @@ public class Twitter {
     DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
     private ArrayList<String> users = new ArrayList<String>();
     private ArrayList<String> groups = new ArrayList<String>();
+    private ArrayList<Long> userTime = new ArrayList<Long>();
+    private ArrayList<Long> updatedTime = new ArrayList<Long>();
+
+    private ArrayList<Long> groupTime = new ArrayList<Long>();
     private ArrayList<String> messages = new ArrayList<String>();
 
     private ArrayList<DefaultMutableTreeNode> groupsNode = new ArrayList<DefaultMutableTreeNode>();
@@ -50,6 +55,8 @@ public class Twitter {
         JButton groupTotalButton = new JButton("Show Group Total");
         JButton messageTotalButton = new JButton("Show Messages Total");
         JButton positiveButton = new JButton("Show Positive Percentage");
+        JButton validateButton = new JButton("Validate");
+        JButton lastUpdated = new JButton("Last Updated User");
         JLabel userLabel = new JLabel("User ID: ");
         JLabel groupLabel = new JLabel("Group ID: ");
 
@@ -124,6 +131,99 @@ public class Twitter {
                     frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 }
 
+            }
+        });
+        lastUpdated.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<Long> tempTime = Twitter.pointer.getUpdatedTime();
+                ArrayList<String> tempUser = Twitter.pointer.getUsers();
+                if (tempTime.size() > 0) {
+                    Long maxVal = Collections.max(tempTime);
+                    Integer maxId = tempTime.indexOf(maxVal);
+
+                    JFrame frame2 = new JFrame("Last Updated User");
+                    JLabel label = new JLabel("The Last Updated User is: " + tempUser.get(maxId));
+
+                    JPanel panel = new JPanel(new BorderLayout(5, 5));
+                    BoxLayout box = new BoxLayout(panel, BoxLayout.X_AXIS);
+
+                    panel.setLayout(box);
+                    panel.add(label);
+                    panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                    frame2.add(panel);
+                    frame2.setSize(300, 100);
+                    frame2.setVisible(true);
+                    frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                } else {
+                    JFrame frame2 = new JFrame("Last Updated User");
+                    JLabel label = new JLabel("No messages have been updated.");
+
+                    JPanel panel = new JPanel(new BorderLayout(5, 5));
+                    BoxLayout box = new BoxLayout(panel, BoxLayout.X_AXIS);
+
+                    panel.setLayout(box);
+                    panel.add(label);
+                    panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                    frame2.add(panel);
+                    frame2.setSize(300, 100);
+                    frame2.setVisible(true);
+                    frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                }
+
+            }
+        });
+        validateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<String> temp = new ArrayList<>();
+                ArrayList<String> tempUsers = pointer.getUsers();
+                ArrayList<String> tempGroups = pointer.getGroups();
+                temp.addAll(tempUsers);
+                temp.addAll(tempGroups);
+                int a = 0;
+                for (int i = 0; i < temp.size(); i++) {
+                    for (int j = i + 1; j < temp.size(); j++) {
+                        if (temp.get(i).equals(temp.get(j))) {
+                            a = 1;
+                        }
+                    }
+                }
+                for (int k = 0; k < temp.size(); k++) {
+                    if (temp.get(k).contains(" "))
+                        a = 1;
+                }
+                if (a == 1) {
+                    JFrame frame2 = new JFrame("Invalid ID Data");
+                    JLabel label = new JLabel("User/Group ID Data is invalid.");
+
+                    JPanel panel = new JPanel(new BorderLayout(5, 5));
+                    BoxLayout box = new BoxLayout(panel, BoxLayout.X_AXIS);
+
+                    panel.setLayout(box);
+                    panel.add(label);
+                    panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                    frame2.add(panel);
+                    frame2.setSize(300, 100);
+                    frame2.setVisible(true);
+                    frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                } else {
+                    JFrame frame2 = new JFrame("Valid ID Data");
+                    JLabel label = new JLabel("User/Group ID Data is valid.");
+
+                    JPanel panel = new JPanel(new BorderLayout(5, 5));
+                    BoxLayout box = new BoxLayout(panel, BoxLayout.X_AXIS);
+
+                    panel.setLayout(box);
+                    panel.add(label);
+                    panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                    frame2.add(panel);
+                    frame2.setSize(300, 100);
+                    frame2.setVisible(true);
+                    frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                }
             }
         });
 
@@ -234,6 +334,7 @@ public class Twitter {
         JPanel panel5 = new JPanel(new BorderLayout(5, 5));
         JPanel panel6 = new JPanel(new BorderLayout(5, 5));
         JPanel panel7 = new JPanel(new BorderLayout(5, 5));
+        JPanel panel8 = new JPanel(new BorderLayout(5, 5));
 
         BoxLayout box1 = new BoxLayout(panel1, BoxLayout.X_AXIS);
         BoxLayout box2 = new BoxLayout(panel2, BoxLayout.X_AXIS);
@@ -242,6 +343,7 @@ public class Twitter {
         BoxLayout box5 = new BoxLayout(panel5, BoxLayout.Y_AXIS);
         BoxLayout box6 = new BoxLayout(panel6, BoxLayout.X_AXIS);
         BoxLayout box7 = new BoxLayout(panel7, BoxLayout.X_AXIS);
+        BoxLayout box8 = new BoxLayout(panel8, BoxLayout.X_AXIS);
 
         panel1.setLayout(box1);
         panel2.setLayout(box2);
@@ -250,6 +352,7 @@ public class Twitter {
         panel5.setLayout(box5);
         panel6.setLayout(box6);
         panel7.setLayout(box7);
+        panel8.setLayout(box8);
 
         panel1.setBorder(new EmptyBorder(new Insets(20, 50, 50, 20)));
         panel2.setBorder(new EmptyBorder(new Insets(20, 50, 50, 20)));
@@ -258,6 +361,7 @@ public class Twitter {
         panel5.setBorder(new EmptyBorder(new Insets(20, 50, 50, 20)));
         panel6.setBorder(new EmptyBorder(new Insets(20, 50, 50, 20)));
         panel7.setBorder(new EmptyBorder(new Insets(20, 50, 50, 20)));
+        panel8.setBorder(new EmptyBorder(new Insets(20, 50, 50, 20)));
 
         panel1.add(userLabel);
         panel1.add(userID);
@@ -290,15 +394,21 @@ public class Twitter {
         panel5.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel5.add(panel3);
         panel5.add(panel4);
+        panel8.add(validateButton);
+        panel8.add(Box.createGlue());
+        panel8.add(lastUpdated);
+        panel8.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel5.add(panel8);
         panel5.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         panel6.add(tree);
         panel6.add(panel5);
+
         panel6.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         frame.add(panel6);
 
-        frame.setSize(800, 600);
+        frame.setSize(800, 700);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -404,4 +514,29 @@ public class Twitter {
     public void addGroupNode(DefaultMutableTreeNode node) {
         groupsNode.add(node);
     }
+
+    public ArrayList<Long> getUserTime() {
+        return this.userTime;
+    }
+
+    public void setUserTime(ArrayList<Long> userTime) {
+        this.userTime = userTime;
+    }
+
+    public ArrayList<Long> getGroupTime() {
+        return this.groupTime;
+    }
+
+    public void setGroupTime(ArrayList<Long> groupTime) {
+        this.groupTime = groupTime;
+    }
+
+    public ArrayList<Long> getUpdatedTime() {
+        return this.updatedTime;
+    }
+
+    public void setUpdatedTime(ArrayList<Long> updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
 }

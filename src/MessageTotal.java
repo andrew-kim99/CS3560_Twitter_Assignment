@@ -1,3 +1,4 @@
+
 //this class contains the messageTotal variable, which the size of the 
 //messages ArrayList from the Twitter class. As more messages are added
 //to the system, this class will contain the number of total messages

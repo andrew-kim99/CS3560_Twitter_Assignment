@@ -1,3 +1,4 @@
+
 //this interface ensures that CalculateVisitor implements a visit method
 //for each of the four class types. 
 public interface Visitor {

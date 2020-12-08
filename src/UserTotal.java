@@ -1,3 +1,4 @@
+
 //this class contains the userTotal variable, which the size of the 
 //users ArrayList from the Twitter class. As more users are added
 //to the system, this class will contain the number of total users
